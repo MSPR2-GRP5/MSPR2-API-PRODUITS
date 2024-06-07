@@ -5,6 +5,7 @@ class products(models.Model):
     product_name = models.CharField(max_length=100)
     import_location = models.CharField(max_length=60)
     price = models.IntegerField()
+    stocks = models.IntegerField()
 
 
 
