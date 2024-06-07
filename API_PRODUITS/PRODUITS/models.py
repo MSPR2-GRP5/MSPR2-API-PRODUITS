@@ -8,7 +8,4 @@ class products(models.Model):
     price = models.IntegerField()
     stocks = models.IntegerField()
 
-
-
-
 # Create your models here.
