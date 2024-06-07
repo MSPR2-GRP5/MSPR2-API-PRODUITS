@@ -27,11 +27,11 @@ def patch_operation(request):
 
 #Schema d'un produit
 class productSchema(Schema):
-    name = str
-    desc = str
-    location = str
-    price = int
-    stock = int
+    name: str = "Nom"
+    desc: str = "Description"
+    location: str = "Lieu d'importation"
+    price: int = "Price"
+    stock: int = "Stocks"
 
 #Chaque service devra fournir, via une API REST, des opérations de création/modification/suppression et
 #recherche des objets liés (cf détails des endpoints à développer).
@@ -57,7 +57,7 @@ def getProduct(request,id,name,desc,location,price,stocks):
     ...
 
 #Recherche des produits par param, voir comment mettre dans le get.
-@api.post("/search")
-def searchBy(request,name = nom):
-    ...
+def searchBy(request,data: productSchema):
+    return f"Test {data.desc}"
+        
 
