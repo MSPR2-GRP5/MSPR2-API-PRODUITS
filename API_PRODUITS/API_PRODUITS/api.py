@@ -14,11 +14,6 @@ from ninja import NinjaAPI
 
 api = NinjaAPI()
 
-
-@api.get("/attempt")
-def attempt(request):
-    return "Attempted"
-
 @api.get("/math/{a}and{b}")
 def math(request, a: int, b: int):
     return {"add": a + b, "multiply": a * b}
