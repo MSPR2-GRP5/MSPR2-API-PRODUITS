@@ -1,40 +1,8 @@
-from ninja import NinjaAPI, Schema, Form
+from django.db.models import F
+from django.db.models import DEFERRED
+from ninja import NinjaAPI, Schema
 
 api = NinjaAPI()
-
-
-#Schema d'un produit
-class productSchema(Schema):
-    name: str = "Nom"
-    desc: str = "Description"
-    location: str = "Lieu d'importation"
-    price: int = "Price"
-    stock: int = "Stocks"
-
-
-class HelloSchema(Schema):
-    name: str = "world"
-
-@api.post("/hello")
-def hello(request, data: HelloSchema):
-    return f"Hello {data.name}"
-
-
-from ninja import NinjaAPI
-
-api = NinjaAPI()
-
-@api.get("/math/{a}and{b}")
-def math(request, a: int, b: int):
-    return {"add": a + b, "multiply": a * b}
-
-class HelloSchema(Schema):
-    name: str = "world"
-
-@api.post("/hello")
-def hello(request, data: HelloSchema):
-    return f"Hello {data.name}"
-
 
 @api.get("/path")
 def get_operation(request):
@@ -57,6 +25,13 @@ def patch_operation(request):
     ...
 
 
+#Schema d'un produit
+class productSchema(Schema):
+    name: str = "Nom"
+    desc: str = "Description"
+    location: str = "Lieu d'importation"
+    price: int = "Price"
+    stock: int = "Stocks"
 
 #Chaque service devra fournir, via une API REST, des opérations de création/modification/suppression et
 #recherche des objets liés (cf détails des endpoints à développer).
@@ -82,8 +57,7 @@ def getProduct(request,id,name,desc,location,price,stocks):
     ...
 
 #Recherche des produits par param, voir comment mettre dans le get.
-@api.post("/search")
-def searchBy(request,data: Form[productSchema]):
-    return data
+def searchBy(request,data: productSchema):
+    return f"Test {data.desc}"
         
 
