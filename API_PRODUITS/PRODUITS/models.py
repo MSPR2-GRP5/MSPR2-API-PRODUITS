@@ -1,10 +1,10 @@
 from django.db import models
 
-class products(models.Model):
-    id = models.BigAutoField(primary_key=True)
-    product_name = models.CharField(max_length=100)
+class Products(models.Model):
+    id = models.AutoField(primary_key=True)
+    product_name = models.CharField(max_length=255)
     description = models.CharField(max_length=255)
-    import_location = models.CharField(max_length=60)
+    import_location = models.CharField(max_length=255)
     price = models.IntegerField()
     stocks = models.IntegerField()
 

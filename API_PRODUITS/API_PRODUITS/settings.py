@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "PRODUITS.apps.ProduitsConfig",
     "API_PRODUITS",
+    "ninja_apikey",
 ]
 
 MIDDLEWARE = [
