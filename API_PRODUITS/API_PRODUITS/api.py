@@ -22,10 +22,6 @@ def hello(request: Any, data: HelloSchema) -> str:
     return f"Hello {data.name}"
 
 
-from ninja import NinjaAPI
-
-api = NinjaAPI()
-
 @api.get("/math/{a}and{b}")
 def math(request: Any, a: int, b: int) -> dict[str, int]:
     return {"add": a + b, "multiply": a * b}
