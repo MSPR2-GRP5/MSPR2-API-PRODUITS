@@ -1,47 +1,38 @@
-from PRODUITS import DBFunctions as dbf
 from django.contrib import admin
 from django.urls import path
-# from .api import api
 from ninja import NinjaAPI, Schema
-from ninja_apikey.security import APIKeyAuth
-
+import PRODUITS.DBFunctions as dbf
+from ninja_apikey.security import APIKeyAuth 
+from typing import Any
 #Schema d'un produit
 
-api = NinjaAPI()
+
 class ProdsOut(Schema):
     id : int
     product_name: str
     description: str
     import_location: str
-
-
-
+    price : float
+    stocks : int
 
 # api = NinjaAPI(auth=APIKeyAuth())
+api = NinjaAPI()
 
-
-@api.post("/create")
-def createProduct(request,name,desc,location,price,stocks):
+@api.post("/product")
+def create(request: Any, name: str, desc: str, location: str, price: float, stocks: int) -> int:
     return(dbf.addProduct(name,desc,location,price,stocks))
 
-@api.post("/search", response = list[ProdsOut])
-def search(request, name = "",desc = "",location= "") :
+@api.get("/product", response = list[ProdsOut])
+def search(request: Any, name: str = "",desc: str = "",location: str= "", price: float = None, stocks: int = None) -> Any:
     return(dbf.searchProduct(name,desc,location))
 
-# #Suppression du produit
-# @api.post("/delete")
-# def deleteProduct(request,id):
-#     ...
+@api.patch("/product")
+def update(request: Any, id: int, name: str= "",desc: str= "", location: str= "") -> int:
+    return(dbf.updateProduct(id,name,desc,location))
 
-# #Modification d'un produit
-# @api.post("/modify")
-# def modifyProduct(request,id,name,desc,location,price,stocks):
-#     ...
-
-# #Liste des produits
-# @api.post("/get")
-# def getProduct(request,id,name,desc,location,price,stocks):
-#     ...
+@api.delete("/product")
+def delete(request: Any, id : int) -> int:
+    return(dbf.deleteProduct(id))
 
 urlpatterns = [
     path('admin/', admin.site.urls),
