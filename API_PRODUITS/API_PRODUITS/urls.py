@@ -1,24 +1,60 @@
-"""
-URL configuration for API_PRODUITS project.
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/5.0/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.contrib import admin
 from django.urls import path
-from .api import api
+from ninja import NinjaAPI, Schema
+import PRODUITS.DBFunctions as dbf
+from ninja_apikey.security import APIKeyAuth
+from typing import Any
+# Schema d'un produit
+
+
+class ProdsOut(Schema):
+    id: int
+    product_name: str
+    description: str
+    import_location: str
+    price: float
+    stocks: int
+
+
+api = NinjaAPI(auth=APIKeyAuth())
+# api = NinjaAPI()
+
+
+@api.post("")
+def create(
+    request: Any, name: str, desc: str, location: str, price: float, stocks: int
+) -> int:
+    return dbf.addProduct(name, desc, location, price, stocks)
+
+
+@api.get("", response=list[ProdsOut])
+def search(request: Any, name: str = "", desc: str = "", location: str = "") -> Any:
+    return dbf.searchProduct(Name=name, Desc=desc, Location=location)
+
+
+# @api.get("/{id}", response = list[ProdsOut])
+# def get(request: Any, name: str = "",desc: str = "",location: str= "", price: float = None, stocks: int = None) -> Any:
+#     return(dbf.searchProduct(name,desc,location))
+
+
+@api.get("{id}", response=list[ProdsOut])
+def get(request: Any, id: int) -> Any:
+    return dbf.searchProduct(id=id)
+
+
+@api.patch("")
+def update(
+    request: Any, id: int, name: str = "", desc: str = "", location: str = ""
+) -> int:
+    return dbf.updateProduct(id, name, desc, location)
+
+
+@api.delete("")
+def delete(request: Any, id: int) -> int:
+    return dbf.deleteProduct(id)
+
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path("api/", api.urls),
+    path("admin/", admin.site.urls),
+    path("products/", api.urls),
 ]

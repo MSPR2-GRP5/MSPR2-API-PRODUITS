@@ -1,63 +1,71 @@
+from PRODUITS.models import Products
 from typing import Any
 
-from ninja import NinjaAPI, Schema
 
-api = NinjaAPI()
-
-# @api.get("/path")
-# def get_operation(request):
-#     ...
-#
-# @api.post("/path")
-# def post_operation(request):
-#     ...
-#
-# @api.put("/path")
-# def put_operation(request):
-#     ...
-#
-# @api.delete("/path")
-# def delete_operation(request):
-#     ...
-#
-# @api.patch("/path")
-# def patch_operation(request):
-#     ...
+def addProduct(name: str, desc: str, location: str, price: float, stock: int) -> int:
+    try:
+        Products(
+            product_name=name,
+            description=desc,
+            import_location=location,
+            price=price,
+            stocks=stock,
+        ).save()
+        return 1
+    except Exception:
+        return 0
 
 
-#Schema d'un produit
-class productSchema(Schema):
-    name: str = "Nom"
-    desc: str = "Description"
-    location: str = "Lieu d'importation"
-    price: int = 0
-    stock: int = 0
+def updateProduct(
+    id: int,
+    name: str = "",
+    desc: str = "",
+    location: str = "",
+    price: float = -1,
+    stocks: int = -1,
+) -> int:
+    try:
+        product = Products.objects.filter(id=id)[0]
+        if name:
+            product.product_name = name
+        if desc:
+            product.description = desc
+        if location:
+            product.import_location = location
+        if price >= 0:
+            product.price = price
+        if stocks >= 0:
+            product.stocks = stocks
+        product.save()
+        return 1
+    except Exception:
+        return 0
 
-#Chaque service devra fournir, via une API REST, des opérations de création/modification/suppression et
-#recherche des objets liés (cf détails des endpoints à développer).
 
-#Création du produit
-# @api.post("/create")
-# def createProduct(request,id,name,desc,location,price,stocks):
-#     ...
-#
-# #Suppression du produit
-# @api.post("/delete")
-# def deleteProduct(request,id):
-#     ...
-#
-# #Modification d'un produit
-# @api.post("/modify")
-# def modifyProduct(request,id,name,desc,location,price,stocks):
-#     ...
-#
-# #Liste des produits
-# @api.post("/get")
-# def getProduct(request,id,name,desc,location,price,stocks):
-#     ...
+def searchProduct(
+    id: int = 0, Name: str = "", Desc: str = "", Location: str = ""
+) -> Any:
+    try:
+        products_out = Products.objects.all()
+        if id != 0:
+            products_out = products_out.filter(id=id)
+        else:
+            if Name:
+                products_out = products_out.filter(product_name=Name)
+            if Desc:
+                products_out = products_out.filter(description=Desc)
+            if Location:
+                products_out = products_out.filter(import_location=Location)
 
-#Recherche des produits par param, voir comment mettre dans le get.
-def searchBy(request: Any,data: productSchema) -> str:
-    return f"Test {data.desc}"
-        
+        return products_out
 
+    except Exception:
+        return 0
+
+
+def deleteProduct(id: int) -> int:
+    try:
+        Products.objects.filter(id=id).delete()
+        return 1
+    except Exception:
+        return 0

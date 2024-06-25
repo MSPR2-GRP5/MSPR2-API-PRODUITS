@@ -4,20 +4,18 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='products',
+            name="products",
             fields=[
-                ('id', models.BigAutoField(primary_key=True, serialize=False)),
-                ('product_name', models.CharField(max_length=100)),
-                ('import_location', models.CharField(max_length=60)),
-                ('price', models.IntegerField()),
+                ("id", models.BigAutoField(primary_key=True, serialize=False)),
+                ("product_name", models.CharField(max_length=100)),
+                ("import_location", models.CharField(max_length=60)),
+                ("price", models.IntegerField()),
             ],
         ),
     ]
