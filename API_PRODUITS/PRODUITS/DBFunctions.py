@@ -27,15 +27,18 @@ def updateProduct(id : int, name :str ="",desc : str ="", location : str ="", pr
     except Exception:
         return 0
 
-def searchProduct(Name: str = "", Desc: str = "", Location: str = "") -> Any:
+def searchProduct(id : int = "", Name: str = "", Desc: str = "", Location: str = "") -> Any:
     try:
         products_out = Products.objects.all()
-        if(Name) :
-            products_out = products_out.filter(product_name = Name)
-        if(Desc):
-            products_out = products_out.filter(description = Desc)
-        if(Location):
-            products_out = products_out.filter(import_location = Location)
+        if id != 0 :
+            products_out = products_out.filter(id = id)
+        else:
+            if(Name) :
+                products_out = products_out.filter(product_name = Name)
+            if(Desc):
+                products_out = products_out.filter(description = Desc)
+            if(Location):
+                products_out = products_out.filter(import_location = Location)
 
         return products_out
         
