@@ -20,20 +20,20 @@ class DBTestCase(TestCase) :
         dbf.deleteProduct(3)
         self.assertEqual(Products.objects.all().count(), 2, "Should return 2.")
     
-    def testCreateProduct_WrongNameInput(self) -> None :    #Création érronée sur le nom.
-        dbf.addProduct(None,"Out of this world.","Britain",3,30), 0, "Should return 0." 
+    def testCreateProduct_WrongNameInput(self) -> None :    
+        dbf.addProduct(None,"Out of this world.","Britain",3,30), 0, "Should return 0." # type: ignore  #Création érronée sur le nom.
 
     def testCreateProduct_WrongDescInput(self) -> None :
-        dbf.addProduct("Fancy grainTM",None,"France",3,30), 0, "Should return 0." #Création érronée sur la description.
+        dbf.addProduct("Fancy grainTM",None,"France",3,30), 0, "Should return 0." # type: ignore  #Création érronée sur la description.
 
     def testCreateProduct_WrongLocationInput(self) -> None :
-        dbf.addProduct("Fancier grainTM","Out of this world.",None,3,30), 0, "Should return 0." #Création érronée sur la location.
+        dbf.addProduct("Fancier grainTM","Out of this world.",None,3,30), 0, "Should return 0." # type: ignore  #Création érronée sur la location.
 
     def testCreateProduct_WrongStockInput(self) -> None :
-        dbf.addProduct("Fanciest grainTM","Out of this world.","The local shady garden",None,30), 0, "Should return 0." #Création érronée sur le stock.
+        dbf.addProduct("Fanciest grainTM","Out of this world.","The local shady garden",None,30), 0, "Should return 0." # type: ignore  #Création érronée sur le stock.
 
     def testCreateProduct_WrongPriceInput(self) -> None :
-        dbf.addProduct("Definitly not fancy grainTM","Out of this world.","Carrefour",5,None), 0, "Should return 0." #Création érronée sur le prix.
+        dbf.addProduct("Definitly not fancy grainTM","Out of this world.","Carrefour",5,None), 0, "Should return 0." # type: ignore #Création érronée sur le prix.
 
     def testSearchProduct(self) -> None :   #Recherche des produits selon des critères .
         self.assertEqual(   #Selon le nom.
