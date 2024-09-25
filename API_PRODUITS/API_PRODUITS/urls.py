@@ -1,19 +1,25 @@
 from django.contrib import admin
 from django.urls import path
-from ninja import NinjaAPI, Schema
+from ninja import NinjaAPI, ModelSchema  # ,Schema
 import PRODUITS.DBFunctions as dbf
-from ninja_apikey.security import APIKeyAuth
 from typing import Any
+from ninja_apikey.security import APIKeyAuth
+# from datetime import datetime
+from PRODUITS.models import Products
 # Schema d'un produit
 
 
-class ProdsOut(Schema):
-    id: int
-    product_name: str
-    description: str
-    import_location: str
-    price: float
-    stocks: int
+class ProdsOut(ModelSchema):
+    # id: int
+    # created_at: datetime
+    # name: str
+    # description: str
+    # color: str
+    # price: float
+    # stock: int
+    class Meta:
+        model = Products
+        fields = "__all__"
 
 
 api = NinjaAPI(auth=APIKeyAuth())
@@ -22,14 +28,23 @@ api = NinjaAPI(auth=APIKeyAuth())
 
 @api.post("")
 def create(
-    request: Any, name: str, desc: str, location: str, price: float, stocks: int
+    request: Any,
+    add_name: str,
+    add_desc: str,
+    add_color: str,
+    add_price: float,
+    add_stock: int,
 ) -> int:
-    return dbf.addProduct(name, desc, location, price, stocks)
+    return dbf.addProduct(add_name, add_desc, add_color, add_price, add_stock)
 
 
 @api.get("", response=list[ProdsOut])
-def search(request: Any, name: str = "", desc: str = "", location: str = "") -> Any:
-    return dbf.searchProduct(Name=name, Desc=desc, Location=location)
+def search(
+    request: Any, search_name: str = "", search_desc: str = "", search_color: str = ""
+) -> Any:
+    return dbf.searchProduct(
+        search_name=search_name, search_desc=search_desc, search_color=search_color
+    )
 
 
 # @api.get("/{id}", response = list[ProdsOut])
@@ -44,9 +59,17 @@ def get(request: Any, id: int) -> Any:
 
 @api.patch("")
 def update(
-    request: Any, id: int, name: str = "", desc: str = "", location: str = ""
+    request: Any,
+    id: int,
+    update_name: str = "",
+    update_desc: str = "",
+    update_color: str = "",
+    update_price: float = -1,
+    update_stock: int = -1,
 ) -> int:
-    return dbf.updateProduct(id, name, desc, location)
+    return dbf.updateProduct(
+        id, update_name, update_desc, update_color, update_price, update_stock
+    )
 
 
 @api.delete("")
