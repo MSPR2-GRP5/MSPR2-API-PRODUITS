@@ -1,9 +1,24 @@
+networks:
+  web:
+    external: true
+
 services:
-  app:
-    container_name: api-produits
-    build: ../API_PRODUITS
-    command: python manage.py runserver 0.0.0.0:8000
+  web:
+    container_name: mspr_product
+    build: .
     ports:
-      - "8000:8000"
+      - "8001:8000"
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=web
+      - traefik.http.routers.mspr_product.rule=Host(`produit.mspr.lorisperc.in`)
+      - traefik.http.routers.mspr_product.service=mspr_product
+      - traefik.http.routers.mspr_product.entrypoints=web
+      - traefik.http.routers.mspr_product.entrypoints=websecure
+      - traefik.http.routers.mspr_product.tls=true
+      - traefik.http.routers.mspr_product.tls.certResolver=lets-encrypt
+      - traefik.http.services.mspr_product.loadbalancer.server.port=8000
+    networks:
+      - web
     env_file:
       - .env
